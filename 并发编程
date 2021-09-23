@@ -1,0 +1,28 @@
+Executor与线程池
+  线程池是一种生产者-消费者模式，线程池的使用方是生产者，线程池本身是消费者
+  ThreadPoolExecutor(int corePoolSize, //线程池保有的最小线程数
+                     int maximumPoolSize, //线程池创建的最大线程数
+                     long keepAliveTime, 
+                     TimeUnit unit, 
+                     BlockingQueue workQueue, 
+                     ThreadFactory threadFactory, 
+                     RejectedExecutionHandler handler
+                     )
+Future
+  Java通过ThreadPoolExecutor提供的3个submit()方法和1个FutureTask工具类来支持获得任务执行结果
+  // 提交Runnable任务
+  Future<?> submit(Runnable task); 该方法的参数是一个Runnable接口，Runnable接口的run()方法是没有返回值的，该方法返回的Future仅可以用来断言任务已经结束了，类似于Thread.join()
+  
+  // 提交Callable任务 
+  <T> Future<T> submit(Callable<T> task); 该方法的参数是一个Callable接口，它只有一个call()方法，并且这个方法是有返回值的，
+                                          所以这个方法返回的Future对象可以通过调用其get()方法来获取任务的执行结果
+  
+  // 提交Runnable任务及结果引用 
+  <T> Future<T> submit(Runnable task, T result); 假设这个方法返回的 Future 对象是 f，f.get() 的返回值就是传给 submit() 方法的参数 result
+  
+  返回值都是Future接口，Future接口有五个方法：
+    取消任务的方法cancel()
+    判断任务是否已取消的方法isCancelled()
+    判断任务是否已结束的方法isDone()
+    获得任务执行结果的get()
+    支持超时机制的get(timeout, unit)
